@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Confirm Payment</title>
+    <link href="https://fonts.googleapis.com/css?family=Fira+Sans:400,400i,500,700" rel="stylesheet">
+    <link rel="stylesheet" href="dist/css/style.css">
+    <script src="https://unpkg.com/scrollreveal@4.0.0/dist/scrollreveal.min.js"></script>
+    <script crossorigin="anonymous" src="https://polyfill.io/v3/polyfill.min.js?features=URL %2CURLSearchParams"></script>
+    <script src="dist/js/aws-sdk-2.1018.0.min.js"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script type="text/javascript">
+        AWS.config = {
+            region: 'us-east-1',
+            credentials: new AWS.CognitoIdentityCredentials({
+                IdentityPoolId: 'us-east-1:0c64894c-500f-4de5-b3b5-917364e8d663',
+                RoleArn: 'arn:aws:iam::774365223172:role/StripeParam'
+            })
+        };
+        var ssm = new AWS.SSM({
+            apiVersion: '2014-11-06'
+        });
+        var paramDets = {Name: '/stripePK/live'};
+        ssm.getParameter(paramDets, UpdateStripeKey);
+
+        var g_stripe = null;
+        var url = new URL(document.location.href);
+        var params = url.searchParams;
+        var paymentId = params.get('id');
+
+        function UpdateStripeKey(err, data)
+        {
+            var errMsgSlot = document.getElementById('errorMessage'); // an error occurred
+            var message = '';
+            if (err) 
+            {
+                message = '<p>Failed to get stripe key: ' + err + '</p>';
+            }
+            else 
+            {
+                g_stripe = Stripe(data.Parameter.Value);
+                g_stripe.confirmCardPayment(paymentId).then(function(result) {
+                    if (result.error) {
+                        var payUrl = new URL('/payment.html', document.location.href);
+                        params.delete('id');
+                        payUrl.search = params.toString();
+                        message = "<p>Failed: " + result.error.message + "</p><p>Please <a href='" + payUrl.toString() + "'>click here to try an alternative method</a></p>";
+                    } else {
+                        message = '<p style="color:green">Success! Please wait a few minutes to start any jobs</p>';
+                    }
+                });
+            }
+            errMsgSlot.innerHTML = message;
+        }
+    </script>
+</head>
+<body class="is-boxed has-animations">
+    <div class="body-wrap boxed-container">
+        <header class="site-header">
+            <div class="container">
+                <div class="site-header-large-bg"><span></span></div>
+            </div>
+        </header>
+
+        <main>
+            <section class="hero">
+                <div class="container">
+                    <div class="hero-inner">
+                        <div class="hero-copy">
+                            <div class="container-sm">
+                                <h1 class="hero-title h2-mobile mt-0 is-revealing">&#x46;&#x54;&#x56;&#x44;&#x4c; Confirming Card Payment</h1>
+                                <p class="hero-paragraph is-revealing">Please wait for the confirmation window</p>
+                                <div id="errorMessage" style="color:red"></div>
+                            </div>
+                        </div>
+                        <div class="hero-illustration">
+			    <div class="hero-illustration-browser is-revealing">
+                                <img src="confirm.png">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+        <footer class="site-footer text-light">
+            <div class="container">
+                <div class="site-footer-inner">
+                    <div class="footer-copyright">&copy; 2021 Easier &#x46;&#x54;&#x56;&#x44;&#x4c; - <a href="contact.html">Contact</a></div>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <script src="dist/js/main.min.js"></script>
+</body>
+</html>

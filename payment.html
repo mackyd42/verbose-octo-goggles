@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>&#x44;&#x6f;&#x77;&#x6e;&#x6c;&#x6f;&#x61;&#x64;&#x20;&#x46;&#x72;&#x6f;&#x6d;&#x20;&#x46;&#x69;&#x74;&#x65;&#x2e;&#x54;&#x56; - Payment</title>
+    <link href="https://fonts.googleapis.com/css?family=Fira+Sans:400,400i,500,700" rel="stylesheet">
+    <link rel="stylesheet" href="dist/css/style.css">
+    <script src="https://unpkg.com/scrollreveal@4.0.0/dist/scrollreveal.min.js"></script>
+    <script crossorigin="anonymous" src="https://polyfill.io/v3/polyfill.min.js?features=URL %2CURLSearchParams"></script>
+    <script src="dist/js/common.js"></script>
+    <script src="dist/js/aws-sdk-2.1018.0.min.js"></script>
+    <script src="dist/js/pay.js"></script>
+    <!-- <script src="https://js.stripe.com/v3/"></script> -->
+    <script type="text/javascript">
+        AWS.config = {
+            region: 'us-east-1',
+            credentials: new AWS.CognitoIdentityCredentials({
+                IdentityPoolId: 'us-east-1:0c64894c-500f-4de5-b3b5-917364e8d663',
+                RoleArn: 'arn:aws:iam::774365223172:role/StripeParam'
+            })
+        };
+        var ssm = new AWS.SSM({
+            apiVersion: '2014-11-06'
+        });
+        var paramDets = {Name: '/stripePK/live'};
+        ssm.getParameter(paramDets, UpdateStripeKey);
+
+        var g_stripeKey = '';
+        var g_stripe = null;
+        var g_amount = 999;
+        var g_recurring = 0;
+        var g_tagString = new URLSearchParams();
+        g_tagString.append('single', 'on');
+        var g_buyableItems = {single:{name:'access',price:999}};
+
+        function UpdateStripeKey(err, data)
+        {
+            if (err) 
+            {  // an error occurred
+                var errMsg = document.getElementById('resultMessage');
+                errMsg.innerText = 'Failed to get stripe key, error: ' + err;
+            }
+            else 
+            {
+                g_stripeKey = data.Parameter.Value;
+                SetupStripePayment();
+            }
+        }
+    </script>
+</head>
+<body class="is-boxed has-animations">
+    <div class="body-wrap boxed-container">
+        <header class="site-header">
+            <div class="container">
+                <div class="site-header-large-bg"><span></span></div>
+            </div>
+        </header>
+
+        <main>
+            <section class="hero">
+                <div class="container">
+                    <div class="hero-inner">
+                        <div class="hero-copy">
+                            <div class="container-sm">
+                                <h1 class="hero-title h2-mobile mt-0 is-revealing freePart">Out for the Count</h1>
+                                <h1 class="hero-title h2-mobile mt-0 is-revealing payPart">Simple Pricing<br/>No Subscription</h1>
+                                <p class="hero-paragraph is-revealing freePart">Sorry bud, no free version</p>
+                                <p class="hero-paragraph is-revealing">$9.99 USD - Unlimited &#x64;&#x6f;&#x77;&#x6e;&#x6c;&#x6f;&#x61;&#x64;s for 1 month</p>
+                                <p class="hero-paragraph is-revealing">Watch videos offline or on devices they don't support, forever</p>
+                                <p class="hero-paragraph is-revealing">Pay As You Go, not another subscription</p>
+                                <div class="hero-form newsletter-form field field-grouped is-revealing">
+                                    <div class="control" id="checkoutCell">
+                                        <a class="button button-primary button-block button-shadow" id="mainPayButton" href="javascript:;" onclick="StartCheckout();" data-checkout="1">Checkout $9.99</a>
+                                    </div>
+                                    <input type="hidden" value="1" id="monthCountNumber">
+                                    <div class="control control-expanded">
+                                        <div id="stripe-buttons"></div>
+                                        <span id="no-stripe-buttons"></span>
+                                        <div id="subButton" data-checked="0" style="display:none"></div>
+                                    </div>
+                                </div>
+                            </div>
+				    <div id="resultMessage" class="hero-paragraph"></div>
+                        </div>
+                        <div class="hero-illustration">
+					<div class="hero-illustration-browser is-revealing">
+                                <img src="sub1.jpg" class="repImage payPart">
+                                <img src="sub2.jpg" class="repImage payPart" style="display: none;">
+                                <img src="freebig.jpg" class="freePart">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+        <footer class="site-footer text-light">
+            <div class="container">
+                <div class="site-footer-inner">
+                    <div class="footer-copyright">&copy; 2021 Easier &#x46;&#x54;&#x56;&#x44;&#x4c; - <a href="contact.html">Contact</a></div>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <script src="dist/js/main.min.js"></script>
+    <script type="text/javascript">
+        InitPage();
+    </script>
+</body>
+</html>

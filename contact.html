@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Contact Us</title>
+    <link href="https://fonts.googleapis.com/css?family=Fira+Sans:400,400i,500,700" rel="stylesheet">
+    <link rel="stylesheet" href="dist/css/style.css">
+    <script src="https://unpkg.com/scrollreveal@4.0.0/dist/scrollreveal.min.js"></script>
+</head>
+<body class="is-boxed has-animations">
+    <div class="body-wrap boxed-container">
+        <header class="site-header">
+            <div class="container">
+                <div class="site-header-large-bg"><span></span></div>
+            </div>
+        </header>
+
+        <main>
+            <section class="hero">
+                <div class="container">
+                    <div class="hero-inner">
+                        <div class="hero-copy">
+                            <div class="container-sm">
+                                <h1 class="hero-title h2-mobile mt-0 is-revealing">Contact</h1>
+                                <p class="hero-paragraph is-revealing">If you've recently paid but not received your account creation email, please check your spam/junk folder for a '' email.</p>
+                                <p class="hero-paragraph is-revealing">Please enter your contact email and message below</p>
+                                <form action="https://formspree.io/f/xwkadqjn" method="POST">
+                                    <label for="emailAddress">Email:</label><br/>
+                                    <input type="email" name="_replyto" id="emailAddress" style="width:75%"><br/>
+                                    <label for="messageArea">Your message:</label><br/>
+                                    <textarea name="message" id="messageArea" style="width:75%" rows="5"></textarea><br/>
+                                    <input type="submit" value="Send">
+                                </form>
+                            </div>
+                        </div>
+                        <div class="hero-illustration">
+			    <div class="hero-illustration-browser is-revealing">
+                                <img src="contact.jpg">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+        <footer class="site-footer text-light">
+            <div class="container">
+                <div class="site-footer-inner">
+                    <div class="footer-copyright">&copy; 2021 Easier &#x46;&#x54;&#x56;&#x44;&#x4c;</div>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <script src="dist/js/main.min.js"></script>
+</body>
+</html>
