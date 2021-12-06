@@ -1,4 +1,5 @@
 User-agent: *
 Disallow: /activated.html
+Disallow: /bpend.html
 Disallow: /champion.html
 Disallow: /confirmPayment.html
