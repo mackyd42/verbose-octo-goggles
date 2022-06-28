@@ -1,4 +1,4 @@
-﻿var g_curUrl = new URL(window.location.href);
+var g_curUrl = new URL(window.location.href);
 var g_query = g_curUrl.searchParams;
 var g_stripe = null;
 
@@ -212,6 +212,9 @@ function StartCheckout()
         return;
     }
     DisableCheckoutLinks();
+    var msgLoc = GetElement('resultMessage');
+    msgLoc.scrollIntoView();
+    msgLoc.innerText = "Redirecting... Please wait";
     var url = MakePIUrl(null, null, IsSubSelected() ? 'c' : 'nsc');
     var xhr = new XMLHttpRequest();
     xhr.open("GET", url);
@@ -766,7 +769,7 @@ function CreatePluginBoxes()
         }
         checkbox.onclick = function() {UpdatePrices(this);};
         label.htmlFor = tag;
-        var labelText = sprintf('%1 - £%2%3', plugObj.desc, plugObj.price / 100, plugObj.isSub ? ' per month' : '');
+        var labelText = sprintf('%1 - �%2%3', plugObj.desc, plugObj.price / 100, plugObj.isSub ? ' per month' : '');
         label.innerText = labelText;
         var container = isSub ? subTree : nonsubTree;
         spanbox.appendChild(checkbox);
